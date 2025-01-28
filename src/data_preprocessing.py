@@ -6,14 +6,15 @@ def load_data(file_path):
     data = pd.read_csv(file_path)
     return data
 
-def preprocess_data(df):
+def preprocess_data(df, colums):
     """
     `Scaler` standardizes features by removing the mean and scaling them to unit variance
     """
     scaler = StandardScaler()
-    features = scaler.fit_transform(df.drop(['Date', 'Time', 'Room_Occupancy_Count'], axis=1))
+    features = scaler.fit_transform(df[colums])
     target = df['Room_Occupancy_Count']
     return features, target
 
-def split_data(features, target, test_size=0.2, random_state=42):
-    return train_test_split(features, target, test_size=test_size, random_state=random_state)
+def split_data(features: pd.DataFrame, target: pd.Series, test_size: float=0.2, random_state: int=42) -> tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=test_size, random_state=random_state)
+    return X_train, X_test, y_train, y_test
